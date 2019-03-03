@@ -1,6 +1,7 @@
 package sliceutil
 
 import (
+	"fmt"
 	"reflect"
 	"errors"
 )
@@ -33,14 +34,20 @@ func Find(slice interface{}, f func(interface{}) bool) int {
 		  value     : value of matching type of element in slice
 */
 func Contains(slice interface{}, value interface{}) (bool,error) {
-	if(IsEmpty(slice) || isNil(slice)) {
-		return nil, errors.New("Slice can't be empty")
+	empty,err_empty := IsEmpty(slice)
+	isNil,err_isNil := IsNil(slice)
+	if( empty==true) {
+		return false, errors.New(fmt.Sprintf("Slice can't be empty %s",err_empty))
 	}
+	if( isNil==true) {
+		return false, errors.New(fmt.Sprintf("Slice can't be nil %s",err_isNil))
+	}
+
 	var index int = Find(slice, func(i interface{}) bool { return i==value })
 	if(index>-1) {
-		return true
+		return true, nil
 	} else {
-		return false
+		return false, nil
 	}
 }
 
@@ -52,7 +59,7 @@ func Contains(slice interface{}, value interface{}) (bool,error) {
 
 */
 func IsNil(slice interface{}) (bool,error) {
-	return slice==nil;
+	return (slice==nil),nil;
 }
 
 /*
@@ -63,8 +70,7 @@ func IsNil(slice interface{}) (bool,error) {
 
 */
 func IsNotNil(slice interface{}) (bool,error) {
-	var isNil, error = IsNil(slice);
-	return !isNil;
+	return (!(slice==nil)),nil;
 }
 
 /*
@@ -76,9 +82,9 @@ func IsNotNil(slice interface{}) (bool,error) {
 */
 func IsEmpty(slice interface{}) (bool,error) {
 	if(slice==nil) {
-		return errors.New("Slice passed is nil.")
+		return false, errors.New("Slice can't be nil")
 	}
-	return len(slice)==0
+	return (reflect.ValueOf(slice).Len()==0),nil
 }
 
 
@@ -90,6 +96,5 @@ func IsEmpty(slice interface{}) (bool,error) {
 
 */
 func IsNotEmpty(slice interface{}) (bool,error) {
-	var isEmpty,error = IsEmpty(slice);
-	return !isEmpty;
+	return (!(reflect.ValueOf(slice).Len()==0)),nil;
 }
