@@ -23,3 +23,12 @@ func Find(slice interface{}, f func(interface{}) bool) int {
     }
     return -1
 }
+
+func Contains(slice interface{}, value interface{}) bool {
+	var index int = Find(slice, func(i interface{}) bool { return i==value })
+	if(index>-1) {
+		return true
+	} else {
+		return false
+	}
+}

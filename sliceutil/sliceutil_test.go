@@ -18,3 +18,21 @@ func TestFindValueInSlice(t *testing.T){
 		t.Errorf("Find value test Failed!!")
 	}
 }
+
+func TestContainsValueInSlice(t *testing.T){
+	t.Log("contains value in slice")
+	var a []string
+	a = make([]string,3)
+	a[0] = "aaabc"
+	a[1] = "arkutils"
+	a[2] = "cabac"
+	var findString string = "arkutils"
+
+	result := sliceutil.Contains(a, findString)
+
+	if(result==true) {
+		t.Log("Contains value in slice test successful")
+	} else {
+		t.Errorf("Contains value test Failed!!")
+	}
+}
