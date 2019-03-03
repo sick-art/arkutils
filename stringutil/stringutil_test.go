@@ -5,10 +5,6 @@ import (
 "testing"
 )
 
-func ok(t *testing.T, err error) {
- //To be filled
-}
-
 func TestIfStringIsEmpty(t *testing.T){
    t.Log("Test for empty string")
    result := stringutil.IsEmpty("");
