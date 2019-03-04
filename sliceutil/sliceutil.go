@@ -99,7 +99,6 @@ func IsNotEmpty(slice interface{}) (bool,error) {
 	return (!(reflect.ValueOf(slice).Len()==0)),nil;
 }
 
-
 /*
 	Usage: IsEqual(a)
 	Returns a boolean value of IsEqual for two slices
@@ -144,6 +143,19 @@ func LastIndexOf(slice interface{}, valueToFind interface{}, startIndex int) (in
 		startIndex = reflect.ValueOf(slice).Len()-1
 	}
 	if(valueToFind==nil){
-		
+		values := reflect.Indirect(reflect.ValueOf(slice))
+        for i := startIndex; i >= 0; i-- {
+            if values.Index(i).Interface()==nil {
+                return i
+            }
+        }
+	} else if(reflect.TypeOf(reflect.ValueOf(slice).Index(0).Interface())==reflect.TypeOf(valueToFind)){
+		values := reflect.Indirect(reflect.ValueOf(slice))
+        for i := startIndex; i >= 0; i-- {
+            if (valueToFind==values.Index(i).Interface()) {
+                return i
+            }
+        }
 	}
+	return -1
 }

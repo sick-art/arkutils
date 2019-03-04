@@ -111,3 +111,17 @@ func TestIsSameType(t *testing.T){
 
 	ok(t,true,result)
 }
+
+func TestLastIndexOf(t *testing.T){
+	var a[]int
+	a = make([]int,5)
+	a[0] = 9
+	a[1] = 2
+	a[2] = 7
+	a[3] = 2
+	a[4] = 10
+	
+	result := sliceutil.LastIndexOf(a,2,5)
+
+	ok(t,3,result)
+}
