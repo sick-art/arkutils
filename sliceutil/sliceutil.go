@@ -28,9 +28,9 @@ func Find(slice interface{}, f func(interface{}) bool) int {
 
 /*
 	Usage: contains(a, 34)
-	returns index of a value in a given slice
+	returns true if value is present in slice, otherwise false
 	Accepts:
-		- slice : slice of an array
+		- slice 	: slice of an array
 		  value     : value of matching type of element in slice
 */
 func Contains(slice interface{}, value interface{}) (bool,error) {
@@ -133,6 +133,19 @@ func IsSameType(slice interface{}, anotherSlice interface{}) (bool) {
 	return reflect.TypeOf(slice)==reflect.TypeOf(anotherSlice)
 }
 
+/*
+	Usage: LastIndexOf(slice,value,startFrom)
+	Returns an int value of index of the value in a given slice searched from a startIndex
+	Note:
+		-	If slice is nil, returns -1
+		-	If startIndex is less than 0, returns -1
+		-	If startIndex is greater than slice length, then startIndex is one less than array length
+		-	If value is nil, returns the first nil value found in the slice
+	Accepts:
+		-	slice   	: slice of an array
+			valueToFind	: value of slice element type
+			startIndex	: int value of index to start from
+*/
 func LastIndexOf(slice interface{}, valueToFind interface{}, startIndex int) (int) {
 	if(slice==nil){
 		return -1
@@ -158,4 +171,64 @@ func LastIndexOf(slice interface{}, valueToFind interface{}, startIndex int) (in
         }
 	}
 	return -1
+}
+
+/*
+	Usage: removeElement(slice,index)
+	Returns the slice with the element at index removed
+	Accepts:
+		- slice        : slice of an array of int type
+		  index 	   : index of element to be removed
+*/
+func RemoveElement(slice interface{}, index int) (interface{}) {
+
+	v := reflect.ValueOf(slice)
+
+    if v.Kind() != reflect.Slice {
+        fmt.Errorf("Parameter must be a slice.")
+        return nil
+    }
+
+    rest := make([]interface{}, 0)
+
+
+    for i := 0; i < v.Len(); i++ {
+        current := reflect.ValueOf(slice).Slice(0, i)
+        if v.Index(i).Interface()!=v.Index(index).Interface() {
+        	
+            rest = append(rest, v.Index(i).Interface())
+
+        }
+        slice = current.Interface()
+    }
+
+    elemType:= reflect.TypeOf(slice).Elem()
+
+    switch elemType.Name() {
+    case "int":
+    	result := make([]int, reflect.ValueOf(rest).Len())
+		t := reflect.ValueOf(rest)
+		for i:=0; i <t.Len(); i++ { result[i] = t.Index(i).Interface().(int) }
+		return result
+	case "string":
+		result := make([]string, reflect.ValueOf(rest).Len())
+		t := reflect.ValueOf(rest)
+		for i:=0; i <t.Len(); i++ { result[i] = t.Index(i).Interface().(string) }
+		return result
+	case "bool":
+		result := make([]bool, reflect.ValueOf(rest).Len())
+		t := reflect.ValueOf(rest)
+		for i:=0; i <t.Len(); i++ { result[i] = t.Index(i).Interface().(bool) }
+		return result
+	case "float32":
+		result := make([]float32, reflect.ValueOf(rest).Len())
+		t := reflect.ValueOf(rest)
+		for i:=0; i <t.Len(); i++ { result[i] = t.Index(i).Interface().(float32) }
+		return result
+	default:
+		return nil
+    }
+	
+
+    return nil
 }

@@ -125,3 +125,22 @@ func TestLastIndexOf(t *testing.T){
 
 	ok(t,3,result)
 }
+
+func TestRemoveElement(t *testing.T){
+	var a[]string
+	a = make([]string,3)
+	a[0] = "a"
+	a[1] = "abac"
+	a[2] = "aabc"
+	
+	result := sliceutil.RemoveElement(a,1)
+	
+	var b[]string
+	b = make([]string,2)
+	b[0] = "a"
+	b[1] = "aabc"
+
+	testResult:= sliceutil.IsEqual(result,b)
+	
+	ok(t,true,testResult)
+}
